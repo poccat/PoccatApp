@@ -1,0 +1,76 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '29.0.2'
+
+    defaultConfig {
+        applicationId "com.example.forcatapp"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    //하단 바 네비게이션 외부라이브러리-------------------------------
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.4'
+    implementation "com.android.support:design:28.0.0"
+    //프로필 동그란 이미지 프레임 -----------------------------------
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    //이미지 로더 -----------------------------------
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    //파이어베이스 시작 ------------------------------------
+    implementation platform('com.google.firebase:firebase-bom:25.12.0')
+    implementation 'com.google.firebase:firebase-core:18.0.0'
+    //firebase authentication
+    implementation 'com.google.firebase:firebase-auth:20.0.1'
+    //firebase database
+    implementation 'com.google.firebase:firebase-database:19.6.0'
+    //firebase storage
+    implementation 'com.google.firebase:firebase-storage:19.2.1'
+    implementation 'com.google.firebase:firebase-config:20.0.2'
+    //firebase messaging
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    //파이어베이스 끝 ------------------------------------
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
+
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation "androidx.coordinatorlayout:coordinatorlayout:1.1.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'cz.msebera.android:httpclient:4.5.8'
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:design:28.0.0'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+}
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'

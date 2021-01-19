@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">ForcatApp</string>
+    <string name="edit_profile_fragment">프로필 편집</string>
+    <string name="delete_profile_fragment">프로필 삭제 요청</string>
+    <string name="gallery">갤러리</string>
+    <string name="takePhoto">카메라</string>
+    <string name="next">다음</string>
+    <string name="selected_image">selected_image</string>
+    <string name="dbname_user_photos">dbname_user_photos</string>
+    <string name="dbname_photos">dbname_photos</string>
+    <string name="login_button">로그인</string>
+    <string name="hint_pwd">비밀번호</string>
+    <string name="hint_user">아이디</string>
+    <string name="rc_color">splash_background</string>
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+
+</resources>

@@ -1,0 +1,59 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="10dp"
+    android:paddingTop="10dp"
+    android:paddingRight="10dp"
+    android:paddingBottom="10dp"
+    >
+
+
+    <EditText
+        android:id="@+id/et_memId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="105dp"
+        android:ems="10"
+        android:hint="@string/hint_user"
+        android:text="1@foc.com"
+        android:textSize="25sp" />
+
+    <EditText
+        android:id="@+id/et_memPw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_memId"
+        android:layout_alignLeft="@+id/et_memId"
+        android:text="123456"
+        android:layout_marginTop="40dp"
+        android:ems="10"
+        android:hint="@string/hint_pwd"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_memPw"
+        android:layout_alignLeft="@+id/et_memPw"
+        android:layout_marginTop="28dp"
+        android:text="@string/login_button"
+        android:textSize="30sp"
+        />
+
+    <Button
+        android:id="@+id/loginActivity_buttn_signup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_memPw"
+        android:layout_alignLeft="@+id/et_memPw"
+        android:layout_alignBottom="@+id/btnLogin"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="103dp"
+        android:layout_marginBottom="-74dp"
+        android:text="회원가입"
+        android:textSize="30sp" />
+
+
+</RelativeLayout>

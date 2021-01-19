@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Group.GroupActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--top toolbar-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout1_top">
+            <include layout="@layout/layout_top_tabs"/>
+        </RelativeLayout>
+        <!--중간 부분(body)-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/group_center"
+            android:layout_below="@+id/relLayout1_top">
+        </RelativeLayout>
+        <!-- 하단 바 -->
+
+      <include layout="@layout/layout_bottom_navigation_view"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
