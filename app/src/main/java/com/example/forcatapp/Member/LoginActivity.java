@@ -52,8 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         etMem_id = findViewById(R.id.et_memId);
         etMem_pw = findViewById(R.id.et_memPw);
-        pmem_id = etMem_id.getText().toString();
-        pmem_pw = etMem_pw.getText().toString();
+
         //파이어베이스 로그인 객체 생성
         mAuth = FirebaseAuth.getInstance();
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
@@ -79,6 +78,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_login.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
                 login();
             }
         });
@@ -99,7 +99,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
         private void login() {
-
+            pmem_id = etMem_id.getText().toString();
+            pmem_pw = etMem_pw.getText().toString();
             //---------------------------------------------------------------------- firebase 로그인 처리
             mAuth.signInWithEmailAndPassword(pmem_id, pmem_pw)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>(){

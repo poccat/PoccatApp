@@ -17,8 +17,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 
+import com.example.forcatapp.Main.FollowFragment;
+import com.example.forcatapp.Main.MainFragment;
+import com.example.forcatapp.Main.WriteFragment;
 import com.example.forcatapp.R;
 import com.example.forcatapp.util.BottomNavBarHelper;
+import com.example.forcatapp.util.SectionPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
@@ -40,16 +44,14 @@ public class ChatActivity extends AppCompatActivity {
         setupViewPager();
     }
 
-    public void setTabLayoutImage(){
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_people_black_24dp);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_friend);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_black_24dp);
-    }
 
     private void setupViewPager() {
         //뷰페이저의 페이지가 바뀔떄마다 프래그먼트를 갱신하기
 
-       FragmentPagerAdapter adapter = new Adapter(getSupportFragmentManager());
+        SectionPagerAdapter adapter = new SectionPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new PeopleFragment());
+        adapter.addFragment(new FriendFragment());
+        adapter.addFragment(new ChatFragment());
 
 
         ViewPager viewPager = findViewById(R.id.chat_container);
@@ -59,25 +61,10 @@ public class ChatActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.chat_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_people_black_24dp);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_friend);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_chat_black_24dp);
         tabLayout.getTabAt(1).select();
-        setTabLayoutImage();
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                viewPager.getAdapter().notifyDataSetChanged();
-                setTabLayoutImage();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
     }
     //하단바 설정
@@ -90,31 +77,4 @@ public class ChatActivity extends AppCompatActivity {
         menuItem.setChecked(true);
     }
 
-   class Adapter extends FragmentPagerAdapter {
-        public Adapter(FragmentManager fragmentManager){
-            super(fragmentManager);
-        }
-        @NonNull
-        @Override
-        public Fragment getItem(int position) {
-            if(position==0){
-                return new PeopleFragment();
-            }
-            else if(position==1){
-                return new FriendFragment();
-            }
-            else{
-                return new ChatFragment();
-            }
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-//        @Override
-//        public int getItemPosition(Object object){
-//            return POSITION_NONE;
-//        }
-    }
 }

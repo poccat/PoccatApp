@@ -16,7 +16,7 @@
         android:layout_marginTop="105dp"
         android:ems="10"
         android:hint="@string/hint_user"
-        android:text="1@foc.com"
+        android:text="a@gmail.com"
         android:textSize="25sp" />
 
     <EditText
@@ -25,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/et_memId"
         android:layout_alignLeft="@+id/et_memId"
-        android:text="123456"
+        android:text="123123"
+        android:inputType="textPassword"
         android:layout_marginTop="40dp"
         android:ems="10"
         android:hint="@string/hint_pwd"

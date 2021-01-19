@@ -60,7 +60,7 @@ public class ChatFragment extends Fragment {
             myUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
             //내가 속해있는 모든방의 유저목록과 채팅목록은 chatModels에
             //내가 속한 모든 방이름을 keys에 담음
-            FirebaseDatabase.getInstance().getReference().child("chatrooms").addListenerForSingleValueEvent(new ValueEventListener() {
+            FirebaseDatabase.getInstance().getReference().child("chatrooms").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     chatModels.clear();
@@ -110,24 +110,24 @@ public class ChatFragment extends Fragment {
                             .apply(new RequestOptions().circleCrop())
                             .into(customViewHolder.imageView);
 
-                   for(String user : chatModels.get(position).users.keySet()){
-                       if(!myUid.equals(user)) {
-                           FirebaseDatabase.getInstance().getReference().child("users").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
-                               @Override
-                               public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(String user : chatModels.get(position).users.keySet()){
+                        if(!myUid.equals(user)) {
+                            FirebaseDatabase.getInstance().getReference().child("users").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                   UserModel userModel = snapshot.getValue(UserModel.class);
-                                   customViewHolder.textView_title.append(",");
-                                   customViewHolder.textView_title.append(userModel.userName);
-                               }
+                                    UserModel userModel = snapshot.getValue(UserModel.class);
+                                    customViewHolder.textView_title.append(",");
+                                    customViewHolder.textView_title.append(userModel.userName);
+                                }
 
-                               @Override
-                               public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                               }
-                           });
-                       }
-                   }
+                                }
+                            });
+                        }
+                    }
 
                     if(chatModels.get(position).users.size()>2) {
                         customViewHolder.textView_count.setText(" "+chatModels.get(position).users.size()+"명");
@@ -164,7 +164,7 @@ public class ChatFragment extends Fragment {
                         intent.putExtra("destinationRoom",keys.get(position));
                     }
                     else {
-                         intent = new Intent(view.getContext(), com.example.forcatapp.Chat.MessageActivity.class);
+                        intent = new Intent(view.getContext(), com.example.forcatapp.Chat.MessageActivity.class);
                         intent.putExtra("destinationUid", destinationUsers.get(position));
 
                     }

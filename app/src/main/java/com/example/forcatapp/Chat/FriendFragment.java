@@ -57,24 +57,31 @@ public class FriendFragment extends Fragment {
         List<FriendModel> friendModels;
 
 
-        String myUid= FirebaseAuth.getInstance().getCurrentUser().getUid();
         //아이디가 추가되면 리사이클러뷰에 view아답터 형식으로 아이디 추가하고 새로고침
 
         public FriendFragmentRecyclerViewAdapter() {
             friendModels= new ArrayList<>();
-           Task<DataSnapshot> task = FirebaseDatabase.getInstance().getReference().child("friends").child(myUid).get();
-           task.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-               @Override
-               public void onComplete(@NonNull Task<DataSnapshot> task) {
-                   DataSnapshot datasnapshot = task.getResult();
-               for(DataSnapshot snapshot:datasnapshot.getChildren()){
-                    FriendModel friendModel = snapshot.getValue(FriendModel.class);
+            final String myUid= FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-                    friendModels.add(friendModel);
-               }
-               notifyDataSetChanged();
-               }
-           });
+            FirebaseDatabase.getInstance().getReference().child("friends").child(myUid).addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    friendModels.clear();
+                    for(DataSnapshot snapshot:dataSnapshot.getChildren()){
+                        FriendModel friendModel = snapshot.getValue(FriendModel.class);
+
+                        friendModels.add(friendModel);
+                    }
+                    notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
 //            FirebaseDatabase.getInstance().getReference().child("friends").child(myUid).addValueEventListener(new ValueEventListener() {
 //                @Override
 //                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
