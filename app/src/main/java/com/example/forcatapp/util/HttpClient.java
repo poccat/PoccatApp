@@ -80,7 +80,6 @@ public class HttpClient {
         }
 
         private void setBody(HttpURLConnection connection) {
-
             String parameter = builder.getParameters();
             if ( parameter != null && parameter.length() > 0 ) {
                 OutputStream outputStream = null;
@@ -176,16 +175,17 @@ public class HttpClient {
             private String generateParameters() {
                 StringBuffer parameters = new StringBuffer();
 
-                //url 처리------------------
-                String post_photo_pre = this.parameters.get("post_photo_pre").toString();
-                StringTokenizer st = new StringTokenizer(post_photo_pre, "&");
-
-                String downloadurl = st.nextToken();
-                String token = st.nextToken();
-
-                Log.d(TAG, "generateParameters: downloadurl==>" + downloadurl + ",  token ===> " + token);
-
-                this.parameters.remove("post_photo_pre");
+                //url 처리-----------------------------------------------------------
+                String downloadurl = "";
+                String token = "";
+                if(this.parameters.get("post_photo_pre") != null){
+                    String post_photo_pre = this.parameters.get("post_photo_pre").toString();
+                    StringTokenizer st = new StringTokenizer(post_photo_pre, "&");
+                    downloadurl = st.nextToken();
+                    token = st.nextToken();
+                    Log.d(TAG, "generateParameters: downloadurl==>" + downloadurl + ",  token ===> " + token);
+                    this.parameters.remove("post_photo_pre");
+                }
 
                 Iterator<String> keys = getKeys();
 
@@ -198,9 +198,11 @@ public class HttpClient {
                     parameters.append("&");
                 }
 
-                parameters.append("post_photo1");
-                parameters.append("=");
-                parameters.append(downloadurl);
+                if(downloadurl.length() > 1){
+                    parameters.append("post_photo1");
+                    parameters.append("=");
+                    parameters.append(downloadurl);
+                }
 
                 String params = parameters.toString();
                 /*

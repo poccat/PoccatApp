@@ -105,7 +105,7 @@ public class FirebaseMethods {
                             String downloadUrl = task.getResult().toString();
                             //오라클 DB에 포스팅 정보와 사진경로 업로드=====================================================================================
                             try{
-                                OracleDBUpload oracleDBUpload = new OracleDBUpload();
+                                OracleDBUpload oracleDBUpload = new OracleDBUpload("postingUpload", mContext);
                                 Log.d(TAG, "onComplete: 다운로드 url ===> " + downloadUrl);
                                 Map<String, Object> params = new HashMap<String, Object>();
                                 params.put("mem_no", "11001");
