@@ -53,6 +53,8 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
             this.servletUrl = "/firstB/posting_write.foc";
         } else if (requestCode.equals("getGroupList")){
             this.servletUrl = "/member/group_mem_mygroup.foc";
+        } else if (requestCode.equals("getGroupBoardList")){
+            this.servletUrl = "/member/group_board_list.foc";
         }
 
         HttpClient.Builder http = new HttpClient.Builder
