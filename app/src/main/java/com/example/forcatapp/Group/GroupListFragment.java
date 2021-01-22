@@ -30,97 +30,99 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class GroupListFragment extends Fragment {
-    private static final String TAG = "GroupListFragment";
-    List<String> groupName = new ArrayList<>();
-    List<Map<String, Object>> groupList;
+        private static final String TAG = "GroupListFragment";
+        List<Map<String, Object>> groupList;
 
-    public GroupListFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_group_list, container, false);
-        try {
-            getGroupList();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        public GroupListFragment() {
+            // Required empty public constructor
         }
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.group_list_fragment_recycle);
-        recyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
-        recyclerView.setAdapter(new GroupListFragmentRecyclerViewAdapter());
-
-        return view;
-    }
-
-    public void getGroupList() throws ExecutionException, InterruptedException {
-        // 현재 접속한 유저의 이메일 받아옴
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String mem_email = user.getEmail();
-        Map<String, Object> pMap = new HashMap<>();
-        pMap.put("mem_email", mem_email);
-
-        //member/group_mem_mygroup.foc 로 전송
-        OracleDBUpload oracleDBUpload = new OracleDBUpload("getGroupList", getContext());
-        oracleDBUpload.execute(pMap);
-        //AsyncTask가 완료될때까지 기다림
-        oracleDBUpload.get();
-        // 결과물 List로 반환
-        groupList = oracleDBUpload.resultList;
-        Log.d(TAG, "getGroupList: " + groupList);
-
-        setGroupList(groupList);
-    }
-
-    public void setGroupList(List<Map<String, Object>> groupList) {
-        this.groupList = groupList;
-    }
-
-    class GroupListFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        public GroupListFragmentRecyclerViewAdapter() {
-            Log.d(TAG, "GroupListFragmentRecyclerViewAdapter: groupList => " + groupList);
-            for (int i=0 ; i<groupList.size() ; i++){
-                groupName.add((String) groupList.get(i).get("GRP_NAME"));
-            }
-        }
-
-        @NonNull
+        //0
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_list, parent, false);
-            return new CustomViewHolder(view);
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            // Inflate the layout for this fragment
+            View view = inflater.inflate(R.layout.fragment_group_list, container, false);
+
+            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.group_list_fragment_recycle);
+            recyclerView.setLayoutManager(new LinearLayoutManager(inflater.getContext()));
+            recyclerView.setAdapter(new GroupListFragmentRecyclerViewAdapter());
+            //5
+            return view;
         }
 
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((CustomViewHolder) holder).textView.setText(groupName.get(position));
-
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getContext(),"a",Toast.LENGTH_LONG);
-                    ((GroupActivity) getActivity()).replaceFragment(GroupBoardFragment.newInstance());
+        class GroupListFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+            //1
+            public GroupListFragmentRecyclerViewAdapter() {
+                try {
+                    groupList= getGroupList();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
                 }
-            });
-        }
 
-        @Override
-        public int getItemCount() {
-            return groupList.size();
-        }
-
-        private class CustomViewHolder extends RecyclerView.ViewHolder {
-            public TextView textView;
-
-            public CustomViewHolder(View view) {
-                super(view);
-                textView = (TextView) view.findViewById(R.id.item_group_list_name);
             }
-        }
 
+            //4
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_list, parent, false);
+                return new CustomViewHolder(view);
+            }
+
+            //3
+            //get Item COunt 수만큼 실행됨 실행될떄마다 position이 0부터 1씩올라감
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+                ((CustomViewHolder) holder).textView.setText(groupList.get(position).get("GRP_NAME").toString());
+                String grp_no = groupList.get(position).get("GRP_NO").toString();
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(),"a",Toast.LENGTH_LONG);
+                        //=============================================group board로 넘어감
+                        Log.d(TAG, "onClick: 선택한 그룹번호 :: " + grp_no);
+                        GroupBoardFragment groupBoardFragment = GroupBoardFragment.newInstance();
+                        groupBoardFragment.setGrpNo(grp_no);
+                        ((GroupActivity) getActivity()).replaceFragment(groupBoardFragment);
+                    }
+                });
+            }
+
+            //2
+            @Override
+            public int getItemCount() {
+                return groupList.size();
+            }
+
+            private class CustomViewHolder extends RecyclerView.ViewHolder {
+                public TextView textView;
+
+                public CustomViewHolder(View view) {
+                    super(view);
+                    textView = (TextView) view.findViewById(R.id.item_group_list_name);
+                }
+            }
+
+
+        }
+        public List<Map<String,Object>> getGroupList() throws ExecutionException, InterruptedException {
+            // 현재 접속한 유저의 이메일 받아옴
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String mem_email = user.getEmail();
+            Map<String, Object> pMap = new HashMap<>();
+            pMap.put("mem_email", mem_email);
+
+            //member/group_mem_mygroup.foc 로 전송
+            OracleDBUpload oracleDBUpload = new OracleDBUpload("getGroupList", getContext());
+            oracleDBUpload.execute(pMap);
+            oracleDBUpload.get();
+            // 결과물 List로 반환
+            List<Map<String,Object>> groupList = oracleDBUpload.resultList;
+            Log.d(TAG, "getGroupList: " + groupList);
+
+            return groupList;
+
+        }
     }
-}
