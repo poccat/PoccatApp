@@ -67,6 +67,7 @@ public class GroupListFragment extends Fragment {
         //member/group_mem_mygroup.foc 로 전송
         OracleDBUpload oracleDBUpload = new OracleDBUpload("getGroupList", getContext());
         oracleDBUpload.execute(pMap);
+        //AsyncTask가 완료될때까지 기다림
         oracleDBUpload.get();
         // 결과물 List로 반환
         groupList = oracleDBUpload.resultList;
