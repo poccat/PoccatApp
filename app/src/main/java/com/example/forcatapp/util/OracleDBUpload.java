@@ -48,7 +48,6 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
 
     @Override
         protected Integer doInBackground(Map<String, Object>... maps) { // 내가 전송하고 싶은 파라미터
-
         // Http 요청 준비 작업
         if(requestCode.equals("postingUpload")){
             this.servletUrl = "/firstB/posting_write.foc";
