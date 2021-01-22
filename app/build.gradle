@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.forcatapp"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -71,6 +71,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.github.bootpay:client_android_java:3.3.91'
 }
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
