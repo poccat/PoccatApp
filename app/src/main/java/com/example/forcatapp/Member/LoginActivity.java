@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -58,7 +59,13 @@ public class LoginActivity extends AppCompatActivity {
         //파이어베이스 로그인 객체 생성
         mAuth = FirebaseAuth.getInstance();
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-        mAuth.signOut();
+        //이전 로그인정보 삭제
+             //오라클 세션 로그아웃 처리
+                android.webkit.CookieManager cookieManager = CookieManager.getInstance();
+                cookieManager.removeAllCookies(null);
+                cookieManager.flush();
+             //파이어베이스 로그아웃 처리
+                mAuth.signOut();
 
         //회원가입 클릭 시
         signup = (Button)findViewById(R.id.loginActivity_buttn_signup);

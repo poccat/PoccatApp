@@ -1,28 +1,37 @@
 package com.example.forcatapp.Board;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.forcatapp.R;
 import com.example.forcatapp.util.SessionControl;
 
+import java.net.URISyntaxException;
+
 import kr.co.bootpay.BootpayWebView;
 import kr.co.bootpay.listener.EventListener;
 
-public class BoardFragment extends Fragment {
+public class BoardFragment extends Fragment implements WebAppBridgeInterface {
     private static final String TAG = "BoardFragment";
     BootpayWebView wv_web;
 
@@ -49,6 +58,11 @@ public class BoardFragment extends Fragment {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
+        //결제관련 url 컨트롤
+        wv_web.setWebViewClient(new BWebviewClient());
+        wv_web.setWebChromeClient(new BChromeClient());
+        wv_web.addJavascriptInterface(new WebAppBridge(this), "Android");
+
         //CSS 깨짐 방지-----------------------------
         Intent intent = getActivity().getIntent(); /*데이터 수신*/
         //BoardActivity에서 전달한 번들 저장
@@ -61,7 +75,6 @@ public class BoardFragment extends Fragment {
         }
 
         // 세션 유지 ==============================================================>
-        wv_web.setWebViewClient(new WebViewClient());
         CookieManager cookieManager = CookieManager.getInstance();
 
         //쿠키허용
@@ -75,7 +88,6 @@ public class BoardFragment extends Fragment {
         // 세션 유지 ==============================================================>
 
         wv_web.loadUrl(url);
-        wv_web.setWebViewClient(new WebViewClient());
 
         //아래로 스와이프해서 새로고침하기
         SwipeRefreshLayout refreshLayout = view.findViewById(R.id.swipe_refresh);
@@ -85,7 +97,7 @@ public class BoardFragment extends Fragment {
                 wv_web.reload();
             }
         });
-
+        //새로고침 완료되면 멈추기
         wv_web.setWebViewClient(new WebViewClient()
         {
             public void onPageFinished(WebView view, String url) {
@@ -149,12 +161,145 @@ public class BoardFragment extends Fragment {
         });
     }
 
-    class MyViewClient extends WebViewClient {
-        //웹뷰 내에서 웹 페이지를 불러올때 사용함.
+    @Override
+    public void error(String data) {
+        Log.d(TAG, "error: " + data);
+    }
+
+    @Override
+    public void close(String data) {
+        Log.d(TAG, "close: " + data);
+    }
+
+    @Override
+    public void cancel(String data) {
+        Log.d(TAG, "cancel: " + data);
+    }
+
+    @Override
+    public void ready(String data) {
+        Log.d(TAG, "ready: " + data);
+    }
+
+    @Override
+    public void confirm(String data) {
+        Log.d(TAG, "confirm: " + data);
+        boolean iWantPay = true;
+        if(iWantPay == true) {
+            doJavascript("BootPay.transactionConfirm( " + data + ");");
+        } else {
+            doJavascript("BootPay.removePaymentWindow();");
+        }
+    }
+
+    @Override
+    public void done(String data) {
+        System.out.println(data);
+    }
+
+    private class BWebviewClient extends WebViewClient {
+        private boolean isLoaded = false;
+
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url){
-            super.shouldOverrideUrlLoading(view,url);
-            view.loadUrl(url);
+        public void onPageFinished(WebView view, String url) {
+            Log.d(TAG, "onPageFinished: ");
+            super.onPageFinished(view, url);
+            if(isLoaded) return;
+            isLoaded = true;
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Log.d(TAG, "shouldOverrideUrlLoading: ");
+            Intent intent = parse(url);
+            if (isIntent(url)) {
+                if (isExistInfo(intent, view.getContext()) || isExistPackage(intent, view.getContext()))
+                    return start(intent, view.getContext());
+                else
+                    gotoMarket(intent, view.getContext());
+            } else if (isMarket(url)) {
+                return start(intent, view.getContext());
+            }
+            return url.contains("https://bootpaymark");
+        }
+
+        private Intent parse(String url) {
+            try {
+                Intent intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                Log.d(TAG, "parse: url ===> " + url);
+                if(intent.getPackage() == null) {
+                    if (url == null) return intent;
+                    if (url.startsWith("shinhan-sr-ansimclick")) intent.setPackage("com.shcard.smartpay");
+                    else if (url.startsWith("kftc-bankpay")) intent.setPackage("com.kftc.bankpay");
+                    else if (url.startsWith("ispmobile")) intent.setPackage("kvp.jjy.MispAndroid320");
+                    else if (url.startsWith("hdcardappcardansimclick")) intent.setPackage("com.hyundaicard.appcard");
+                    else if (url.startsWith("kb-acp")) intent.setPackage("com.kbcard.kbkookmincard");
+                    else if (url.startsWith("mpocket.online.ansimclick")) intent.setPackage("kr.co.samsungcard.mpocket");
+                    else if (url.startsWith("lotteappcard")) intent.setPackage("com.lcacApp");
+                    else if (url.startsWith("cloudpay")) intent.setPackage("com.hanaskcard.paycla");
+                    else if (url.startsWith("nhappvardansimclick")) intent.setPackage("nh.smart.nhallonepay");
+                    else if (url.startsWith("citispay")) intent.setPackage("kr.co.citibank.citimobile");
+                    else if (url.startsWith("kakaotalk")) intent.setPackage("com.kakao.talk");
+                    else if (url.startsWith("kakaopay")) intent.setPackage("com.kakao.talk");
+                }
+                return intent;
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        private Boolean isIntent(String url) {
+            return url.matches("^intent:?\\w*://\\S+$");
+        }
+
+        private Boolean isMarket(String url) {
+            return url.matches("^market://\\S+$");
+        }
+
+        private Boolean isExistInfo(Intent intent, Context context) {
+            try {
+                return intent != null && context.getPackageManager().getPackageInfo(intent.getPackage(), PackageManager.GET_ACTIVITIES) != null;
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        private Boolean isExistPackage(Intent intent, Context context) {
+            return intent != null && context.getPackageManager().getLaunchIntentForPackage(intent.getPackage()) != null;
+        }
+
+        private boolean start(Intent intent, Context context) {
+            context.startActivity(intent);
+            return true;
+        }
+
+        private boolean gotoMarket(Intent intent, Context context) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + intent.getPackage())));
+            return true;
+        }
+    }
+
+
+    private class BChromeClient extends WebChromeClient {
+        @Override
+        public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, Message resultMsg) {
+            return super.onCreateWindow(view, isDialog, isUserGesture, resultMsg);
+        }
+
+        @Override
+        public void onCloseWindow(WebView window) {
+            super.onCloseWindow(window);
+        }
+
+        @Override
+        public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
+            new AlertDialog.Builder(view.getContext())
+                    .setMessage(message)
+                    .setCancelable(true)
+                    .create()
+                    .show();
             return true;
         }
     }

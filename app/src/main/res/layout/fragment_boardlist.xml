@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
+    >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -17,10 +20,14 @@
             <!--top toolbar-->
             <include layout="@layout/snippet_top_comgobacktoolbar"/>
         </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout2">
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/swipe_refresh"
-            android:layout_below="@id/relLayout1"
             xmlns:android="http://schemas.android.com/apk/res/android">
 
             <kr.co.bootpay.BootpayWebView
@@ -29,5 +36,7 @@
                 android:layout_height="match_parent" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
