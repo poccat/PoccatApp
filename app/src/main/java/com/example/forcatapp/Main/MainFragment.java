@@ -88,7 +88,7 @@ public class MainFragment extends Fragment {
             }
         });
 
-
+        //새로고침 완료되면 멈추기
         wv_web.setWebViewClient(new WebViewClient()
         {
             public void onPageFinished(WebView view, String url) {

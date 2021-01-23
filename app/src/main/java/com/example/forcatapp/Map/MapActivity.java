@@ -59,8 +59,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             googleMap.setMyLocationEnabled(true);
         }
 
-
-
     }
 
     //하단바 설정
