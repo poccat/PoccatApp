@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.example.forcatapp.R;
 import com.example.forcatapp.util.OracleDBUpload;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 
 public class GroupBoardFragment extends Fragment {
     private static final String TAG = "GroupBoardFragment";
-    List<String> groupBoard = new ArrayList<>();
     List<Map<String, Object>> groupBoardList;
 
     public static GroupBoardFragment newInstance() {
@@ -41,6 +42,7 @@ public class GroupBoardFragment extends Fragment {
         this.mGrpNo = grpNo;
         Log.d(TAG, "onCreateView: setGrpNo" + grpNo);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,6 +66,49 @@ public class GroupBoardFragment extends Fragment {
         return view;
     }
 
+    public void setgroupBoardList(List<Map<String, Object>> groupList) {
+        this.groupBoardList = groupList;
+    }
+    class GroupBoardFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+        public GroupBoardFragmentRecyclerViewAdapter() {
+            Log.d(TAG, "GroupBoardFragmentRecyclerViewAdapter: groupBoardList => " + groupBoardList);
+
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_board,parent,false);
+            return new GroupBoardFragment.GroupBoardFragmentRecyclerViewAdapter.CustomViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            ((CustomViewHolder) holder).group_board_title.setText(groupBoardList.get(position).get("GRP_B_TITLE").toString());
+            ((CustomViewHolder) holder).group_board_cnt.setText(groupBoardList.get(position).get("GRP_B_CNT").toString());
+            //grp_b_no, grp_no,grp_b_title,grp_b_cnt,grp_b_type,grp_b_date
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return groupBoardList.size();
+        }
+
+        private class CustomViewHolder extends RecyclerView.ViewHolder {
+
+            public TextView group_board_title;
+            public TextView group_board_cnt;
+            public CustomViewHolder(View view){
+                super(view);
+                group_board_title = (TextView) view.findViewById(R.id.item_group_list_board_title);
+                group_board_cnt = (TextView) view.findViewById(R.id.item_group_list_board_cnt);
+            }
+
+        }
+    }
+    //db연동
     public void getgroupBoardList() throws ExecutionException, InterruptedException {
         // 해당 그룹의 번호를 맵에 담기
         Map<String, Object> pMap = new HashMap<>();
@@ -79,45 +124,5 @@ public class GroupBoardFragment extends Fragment {
         Log.d(TAG, "getgroupBoardList: " + groupBoardList);
 
         setgroupBoardList(groupBoardList);
-    }
-    public void setgroupBoardList(List<Map<String, Object>> groupList) {
-        this.groupBoardList = groupList;
-    }
-
-    class GroupBoardFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-
-        public GroupBoardFragmentRecyclerViewAdapter() {
-            Log.d(TAG, "GroupBoardFragmentRecyclerViewAdapter: groupBoardList => " + groupBoardList);
-            for (int i=0 ; i<groupBoardList.size() ; i++){
-                groupBoard.add((String) groupBoardList.get(i).get("GRP_B_TITLE"));
-            }
-        }
-
-        @NonNull
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_group_board,parent,false);
-            return new GroupBoardFragment.GroupBoardFragmentRecyclerViewAdapter.CustomViewHolder(view);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            ((GroupBoardFragment.GroupBoardFragmentRecyclerViewAdapter.CustomViewHolder) holder).textView.setText(groupBoard.get(position));
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return groupBoardList.size();
-        }
-
-        private class CustomViewHolder extends RecyclerView.ViewHolder {
-            public TextView textView;
-
-            public CustomViewHolder(View view){
-                super(view);
-                textView = (TextView) view.findViewById(R.id.item_group_list_board_title);
-            }
-        }
     }
 }

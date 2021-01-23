@@ -9,11 +9,14 @@
         android:id="@+id/item_group_list_name"
         android:layout_width="match_parent"
         android:layout_height="67dp"
-        android:textSize="50dp"
+        android:textSize="25dp"
+        android:gravity="center_vertical"
         android:textAlignment="center"
-        android:text="그룹이름" />
+        android:text="그룹이름"
+        tools:ignore="RtlCompat" />
     <TextView
         android:id="@+id/item_group_list_no"
         android:layout_width="0dp"
         android:layout_height="0dp"/>
+
 </LinearLayout>
