@@ -23,6 +23,9 @@ import com.example.forcatapp.util.BottomNavBarHelper;
 import com.example.forcatapp.util.SectionPagerAdapter;
 import com.example.forcatapp.util.UniversalImageLoader;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: 앱 시작");
-
+        passPushTokenToServer();
         initImageLoader(); //이미지 로더 실행메소드
         setupBottomNavigationView();
         setupViewPager();
@@ -81,6 +84,17 @@ public class MainActivity extends AppCompatActivity {
         UniversalImageLoader universalImageLoader = new UniversalImageLoader(mContext);
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
+    void passPushTokenToServer(){
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Map<String,Object> map = new HashMap<>();
+        map.put("pushToken",token);
+        FirebaseDatabase.getInstance().getReference().child("users").child(uid).updateChildren(map);
+    }
+
+
 
 
     }
