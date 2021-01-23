@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.forcatapp.Group.GroupListFragment;
@@ -11,9 +12,13 @@ import com.example.forcatapp.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Integer> {
     private static final String TAG = "OracleDBUpload";
@@ -27,6 +32,8 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
     Context mContext;
     private int status;
     String Result;
+    HttpClient.Builder http;
+    String cookies;
 
 
     public OracleDBUpload(String requestCode, Context context) {
@@ -49,19 +56,30 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
     @Override
         protected Integer doInBackground(Map<String, Object>... maps) { // 내가 전송하고 싶은 파라미터
         // Http 요청 준비 작업
-        if(requestCode.equals("postingUpload")){
-            this.servletUrl = "/firstB/posting_write.foc";
-        } else if (requestCode.equals("getGroupList")){
-            this.servletUrl = "/member/group_mem_mygroup.foc";
-        } else if (requestCode.equals("getGroupBoardList")){
-            this.servletUrl = "/member/group_board_list.foc";
+        switch(requestCode) {
+            case "postingUpload":
+                this.servletUrl = "/firstB/posting_write.foc";
+                break;
+            case "getGroupList":
+                this.servletUrl = "/member/group_mem_mygroup.foc";
+                break;
+            case "getGroupBoardList":
+                this.servletUrl = "/member/group_board_list.foc";
+                break;
+            case "loginGetSession":
+                this.servletUrl = "/member/member_login.foc";
+                break;
+            default:
+                //...
+                break;
         }
 
-        HttpClient.Builder http = new HttpClient.Builder
+            http = new HttpClient.Builder
                 ("POST", "http://" + ip + portNum + servletUrl); //포트번호,서블릿주소
             // Parameter 를 전송한다.
             http.addAllParameters(maps[0]);
             Log.d(TAG, "doInBackground: http.addAllParameters(maps[0])" + maps[0]);
+
             //Http 요청 전송
             HttpClient post = http.create();
             post.request();
@@ -77,6 +95,10 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
                 jsonToArray(body);
             }
 
+            //쿠키 가져오기
+            SessionControl.setHttpclient(post);
+            setCookies(post.cookies);
+
             return statusCode;
         }
 
@@ -89,6 +111,14 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
 
             this.resultList = resultList;
             return resultList;
+    }
+
+    public String getCookies() {
+        return cookies;
+    }
+
+    public void setCookies(String cookies) {
+        this.cookies = cookies;
     }
 
     protected void onPostExecute(Integer result) {

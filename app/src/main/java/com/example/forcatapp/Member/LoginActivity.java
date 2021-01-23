@@ -20,6 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.forcatapp.Main.MainActivity;
 import com.example.forcatapp.R;
+import com.example.forcatapp.util.OracleDBUpload;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -34,11 +35,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.net.ssl.HttpsURLConnection;
+
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     static RequestQueue requestQueue;
     List<Map<String, Object>> memberInfo;
-    String pmem_id, pmem_pw, url;
     private EditText etMem_id, etMem_pw;
     private Button signup;
     private FirebaseAuth mAuth;
@@ -58,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
         mAuth.signOut();
 
+        //회원가입 클릭 시
         signup = (Button)findViewById(R.id.loginActivity_buttn_signup);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,12 +77,23 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
 
+        //로그인 버튼 클릭 시
         Button btn_login = findViewById(R.id.btnLogin);
         btn_login.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                //오라클 로그인 후 세션 처리
+                String pmem_id = etMem_id.getText().toString();
+                String pmem_pw = etMem_pw.getText().toString();
+                OracleDBUpload oracleDBUpload = new OracleDBUpload("loginGetSession", LoginActivity.this);
+                Map<String, Object> params = new HashMap<String, Object>();
+                params.put("mem_email", pmem_id);
+                params.put("mem_pw", pmem_pw);
+                oracleDBUpload.execute(params);
+                Log.d(TAG, "onClick: params ===> " + params);
 
-                login();
+                //앱 로그인
+                login(pmem_id, pmem_pw);
             }
         });
 
@@ -98,9 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-        private void login() {
-            pmem_id = etMem_id.getText().toString();
-            pmem_pw = etMem_pw.getText().toString();
+        private void login(String pmem_id, String pmem_pw) {
             //---------------------------------------------------------------------- firebase 로그인 처리
             mAuth.signInWithEmailAndPassword(pmem_id, pmem_pw)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>(){

@@ -1,10 +1,14 @@
 package com.example.forcatapp.Main;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -16,6 +20,12 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.forcatapp.R;
+import com.example.forcatapp.util.OracleDBUpload;
+import com.example.forcatapp.util.SessionControl;
+
+import java.util.List;
+
+import cz.msebera.android.httpclient.cookie.Cookie;
 
 public class MainFragment extends Fragment {
     private static final String TAG = "MainFragement";
@@ -38,15 +48,11 @@ public class MainFragment extends Fragment {
         WebView content = (WebView) view.findViewById(R.id.wv_main_photoList);
         content.loadDataWithBaseURL(null, "<style>img{display: inline;height: auto;max-width: 100%;}</style>"
                 + "text/html", "text/html", "UTF-8", null);
-
         //CSS 깨짐 방지-----------------------------
         String url = "http://192.168.0.51:9005/firstB/poccat.foc";
         Intent intent = getActivity().getIntent(); /*데이터 수신*/
-//        String mem_no = intent.getExtras().getString("mem_no"); /*String형*/
-//        String mem_name = intent.getExtras().getString("mem_name"); /*String형*/
 
-        //?mem_no=11001
- //       wv_web.loadUrl(url+"?="+mem_no);
+        //글쓰기 후 새로고침--------------------------------------------------------->
         Intent intent2 = getActivity().getIntent();
         if(intent2!=null && intent2.getStringExtra("Context")!=null){
             if(intent2.getStringExtra("Context").equals("fromWrite"));{
@@ -54,8 +60,23 @@ public class MainFragment extends Fragment {
                 webView.reload();
             }
         }
-        wv_web.loadUrl(url);
+        //글쓰기 후 새로고침--------------------------------------------------------->
+
+        // 세션 유지 ==============================================================>
         wv_web.setWebViewClient(new WebViewClient());
+        CookieManager cookieManager = CookieManager.getInstance();
+
+        //쿠키허용
+        wv_web.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        cookieManager.setAcceptCookie(true);
+        cookieManager.setAcceptThirdPartyCookies(wv_web, true);
+
+        String cookieString = SessionControl.getHttpclient().cookies;
+        cookieManager.setCookie(url, cookieString);
+        Log.d(TAG, "onCreateView: main cookieString" + cookieString);
+        // 세션 유지 ==============================================================>
+
+        wv_web.loadUrl(url);
 
         SwipeRefreshLayout refreshLayout = view.findViewById(R.id.swipe_refresh);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -63,6 +84,7 @@ public class MainFragment extends Fragment {
             public void onRefresh() {
                 //새로고침 소스
                 wv_web.reload();
+                Log.d(TAG, "onRefresh: 메인페이지 새로고침 ");
             }
         });
 
@@ -78,7 +100,7 @@ public class MainFragment extends Fragment {
 
         return view;
     }
-    
+
     class MyViewClient extends WebViewClient {
         //웹뷰 내에서 웹 페이지를 불러올때 사용함.
         @Override

@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="게시판 목록"
                 android:textStyle="bold"
-                android:textSize="30dp"
+                android:textSize="25dp"
                 android:padding="20dp"
                 />
 
