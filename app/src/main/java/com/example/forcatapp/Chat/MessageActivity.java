@@ -154,6 +154,7 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
+
     void checkChatRoom(){//채팅방 중복체크
          FirebaseDatabase.getInstance().getReference().child("chatrooms").orderByChild("users/"+uid).equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
