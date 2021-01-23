@@ -2,21 +2,18 @@ package com.example.forcatapp.util;
 
 import java.util.List;
 
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
-
 public class SessionControl {
-    static public DefaultHttpClient httpclient = null;
-    static public List cookies;
+    static public HttpClient httpclient = null;
 
     public static HttpClient getHttpclient() {
         if (httpclient == null) {
-            SessionControl.setHttpclient(new DefaultHttpClient());
+            HttpClient http = new HttpClient();
+            SessionControl.setHttpclient(http);
         }
         return httpclient;
     }
 
-    public static void setHttpclient(DefaultHttpClient httpclient) {
+    public static void setHttpclient(HttpClient httpclient) {
         SessionControl.httpclient = httpclient;
     }
 }

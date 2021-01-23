@@ -1,17 +1,20 @@
 package com.example.forcatapp.util;
 
 import android.util.Log;
+import android.webkit.CookieManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -22,6 +25,7 @@ public class HttpClient {
 
         private int httpStatusCode;
         private String body;
+        public String cookies;
 
         public int getHttpStatusCode() {
             return httpStatusCode;
@@ -38,9 +42,29 @@ public class HttpClient {
         }
 
         public void request() {
+            String COOKIES_HEADER = "Set-Cookie";
+
             HttpURLConnection conn = getConnection();
             setHeader(conn);
             setBody(conn);
+
+            //세션처리를 위한 쿠키매니저======================================
+            Map<String, List<String>> headerFields = conn.getHeaderFields();
+            List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
+            if(cookiesHeader != null) {
+                for (String cookie : cookiesHeader) {
+                    String cookieName = HttpCookie.parse(cookie).get(0).getName();
+                    String cookieValue = HttpCookie.parse(cookie).get(0).getValue();
+
+                    String cookieString = cookieName + "=" + cookieValue;
+
+                    CookieManager.getInstance().setCookie(builder.url, cookieString);
+                    cookies = CookieManager.getInstance().getCookie(builder.url);
+                    Log.d(TAG, "request: CookieManager===>" + cookies);
+                }
+            }
+            //세션처리를 위한 쿠키매니저======================================
+
             httpStatusCode = getStatusCode(conn);
             body = readStream(conn);
             conn.disconnect();

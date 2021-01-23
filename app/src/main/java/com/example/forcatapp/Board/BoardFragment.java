@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.forcatapp.R;
+import com.example.forcatapp.util.SessionControl;
 
 import kr.co.bootpay.BootpayWebView;
 import kr.co.bootpay.listener.EventListener;
@@ -57,6 +59,20 @@ public class BoardFragment extends Fragment {
         if(caseNum == 1){
             bootpay(wv_web, url);
         }
+
+        // 세션 유지 ==============================================================>
+        wv_web.setWebViewClient(new WebViewClient());
+        CookieManager cookieManager = CookieManager.getInstance();
+
+        //쿠키허용
+        cookieManager.setAcceptCookie(true);
+        wv_web.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        cookieManager.setAcceptThirdPartyCookies(wv_web, true);
+
+        String cookieString = SessionControl.getHttpclient().cookies;
+        cookieManager.setCookie(url, cookieString);
+        Log.d(TAG, "onCreateView: BoardFragment cookieString" + cookieString);
+        // 세션 유지 ==============================================================>
 
         wv_web.loadUrl(url);
         wv_web.setWebViewClient(new WebViewClient());

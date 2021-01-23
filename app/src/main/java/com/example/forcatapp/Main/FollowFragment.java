@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.example.forcatapp.R;
 
 public class FollowFragment extends Fragment {
-    private static final String TAG = "CameraFragment";
+    private static final String TAG = "FollowFragment";
     private static final int VERIFY_PERMISSIONS_REQUEST = 1;
     private static final int CAMERA_REQUEST_CODE = 5;
 

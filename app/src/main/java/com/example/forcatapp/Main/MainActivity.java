@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setupViewPager(){
         SectionPagerAdapter adapter = new SectionPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new MypageFragment());
         adapter.addFragment(new FollowFragment());
         adapter.addFragment(new MainFragment());
         adapter.addFragment(new WriteFragment());
@@ -59,10 +60,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         
         //상단 탭 아이콘 설정
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_star);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_cat);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_write);
-        tabLayout.getTabAt(1).select();
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_mypage);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_star);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_cat);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_write);
+        tabLayout.getTabAt(2).select();
     }
     //하단바 설정
     private void setupBottomNavigationView(){
