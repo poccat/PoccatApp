@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 import com.example.forcatapp.R;
 import com.example.forcatapp.util.BottomNavBarHelper;
@@ -93,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         String token = FirebaseInstanceId.getInstance().getToken();
         Map<String,Object> map = new HashMap<>();
         map.put("pushToken",token);
+        Toast.makeText(getApplicationContext(),""+token,Toast.LENGTH_LONG);
         FirebaseDatabase.getInstance().getReference().child("users").child(uid).updateChildren(map);
     }
 
