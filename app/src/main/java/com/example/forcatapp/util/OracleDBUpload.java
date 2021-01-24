@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import com.example.forcatapp.Group.GroupListFragment;
 import com.example.forcatapp.R;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
         public static String ip = "192.168.0.51"; // 자신의 IP주소
         public String portNum = ":9005";
     public String body;
-    public ArrayList<Map<String, Object>> resultList;
+    public List<Map<String, Object>> resultList;
     String requestCode; // postingUpload || getGroupList
     String servletUrl;
     ProgressDialog pdialog;
@@ -69,6 +70,9 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
             case "loginGetSession":
                 this.servletUrl = "/member/member_login.foc";
                 break;
+            case "getMapInfo":
+                this.servletUrl = "/cat/cat_map.foc";
+                break;
             default:
                 //...
                 break;
@@ -77,8 +81,10 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
             http = new HttpClient.Builder
                 ("POST", "http://" + ip + portNum + servletUrl); //포트번호,서블릿주소
             // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-            Log.d(TAG, "doInBackground: http.addAllParameters(maps[0])" + maps[0]);
+            if(maps.length > 0){
+                http.addAllParameters(maps[0]);
+                Log.d(TAG, "doInBackground: http.addAllParameters(maps[0])" + maps[0]);
+            }
 
             //Http 요청 전송
             HttpClient post = http.create();
@@ -102,11 +108,15 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
             return statusCode;
         }
 
-        public ArrayList<Map<String, Object>> jsonToArray (String result) {
+        public List<Map<String, Object>> jsonToArray (String result) {
             Log.d(TAG, "jsonToArray: result? " + result);
-            Gson gson = new Gson();
             Type type = new TypeToken<ArrayList<Map<String, Object>>>() {}.getType();
-            ArrayList<Map<String, Object>> resultList = gson.fromJson(result, type);
+
+            Gson gson = new GsonBuilder()
+                    .registerTypeAdapter(Map.class, new MapDeserializer())
+                    .setDateFormat("yyyy-MM-dd HH:mm:ss").serializeNulls().create();
+
+            List<Map<String, Object>> resultList = gson.fromJson(result, type);
             Log.d(TAG, "jsonToArray: "+resultList);
 
             this.resultList = resultList;
