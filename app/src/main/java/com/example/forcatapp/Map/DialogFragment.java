@@ -22,13 +22,16 @@ import com.example.forcatapp.R;
 public class DialogFragment extends androidx.fragment.app.DialogFragment {
     String name;
     Uri imgUrl;
+    String title, cmt;
+    int no;
 
-    public DialogFragment(String name, Uri imgUrl) {
+    public DialogFragment(String name, Uri imgUrl, String title, int no, String cmt) {
         this.name=name;
         this.imgUrl=imgUrl;
+        this.title = title;
+        this.cmt = cmt;
+        this.no = no;
     }
-
-
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class DialogFragment extends androidx.fragment.app.DialogFragment {
 
         View view = inflater.inflate(R.layout.fragment_dialog, null);
         TextView tv_name= view.findViewById(R.id.cat_name);
-        ImageView iv_cat= view.findViewById(R.id.cat_photo);
+        ImageView iv_cat= view.findViewById(R.id.iv_cat_photo);
         tv_name.setText(name);
         Glide.with
                 (getContext())

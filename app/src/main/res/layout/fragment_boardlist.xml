@@ -1,42 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
-    >
+    android:id="@+id/relLayout_out"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/relLayout1"
+            android:id="@+id/relLayout1_top"
+            android:layout_weight="0"
             >
             <!--top toolbar-->
             <include layout="@layout/snippet_top_comgobacktoolbar"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/relLayout1_top"
+            android:layout_weight="2"
             android:id="@+id/relLayout2">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/swipe_refresh"
-            xmlns:android="http://schemas.android.com/apk/res/android">
-
-            <kr.co.bootpay.BootpayWebView
-                android:id="@+id/wv_board_boardlist"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:id="@+id/swipe_refresh"
+                xmlns:android="http://schemas.android.com/apk/res/android">
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <kr.co.bootpay.BootpayWebView
+                    android:id="@+id/wv_board_boardlist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </RelativeLayout>
-    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/relLayout3_bottom"
+        ></RelativeLayout>
+</LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>

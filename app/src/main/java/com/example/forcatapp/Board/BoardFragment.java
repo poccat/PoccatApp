@@ -58,7 +58,7 @@ public class BoardFragment extends Fragment implements WebAppBridgeInterface {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
-        //결제관련 url 컨트롤
+        //결제관련 url 컨트롤==========================================================
         wv_web.setWebViewClient(new BWebviewClient());
         wv_web.setWebChromeClient(new BChromeClient());
         wv_web.addJavascriptInterface(new WebAppBridge(this), "Android");

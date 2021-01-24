@@ -6,18 +6,52 @@
     android:minWidth="250dp"
     android:minHeight="250dp"
     android:orientation="vertical"
-    tools:context=".Map.DialogFragment">
+    >
 
-    <ImageView
-        android:layout_gravity="center"
-        android:id="@+id/cat_photo"
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
     <TextView
-        android:layout_gravity="center"
         android:id="@+id/cat_name"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="30dp"
+        android:textAlignment="center"
         android:text="dialogFragmentTest" />
+
+    <ImageView
+        android:id="@+id/iv_cat_photo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center" />
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:text="dialogFragmentTest" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="40dp"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_goProfile"
+            android:text="프로필 보기"
+            android:layout_margin="30dp"
+            ></Button>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/btn_goProfile"
+            android:id="@+id/btn_close"
+            android:layout_margin="30dp"
+            android:text="닫기"
+            ></Button>
+    </RelativeLayout>
 
 </LinearLayout>
