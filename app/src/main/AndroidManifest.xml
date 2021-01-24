@@ -38,7 +38,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Chat.GroupMessageActivity"/>
-        <activity android:name=".Main.ScanQrActivity"/>
         <activity android:name=".Chat.MessageActivity"/>
         <activity android:name=".Chat.SelectFriendActivity"/>
         <activity android:name=".Group.GroupActivity" />

@@ -16,7 +16,7 @@
         android:layout_marginTop="105dp"
         android:ems="10"
         android:hint="@string/hint_user"
-        android:text="a@gmail.com"
+        android:text="test@gmail.com"
         android:textSize="25sp" />
 
     <EditText
