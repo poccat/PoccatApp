@@ -58,11 +58,6 @@ public class BoardFragment extends Fragment implements WebAppBridgeInterface {
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
 
-        //결제관련 url 컨트롤==========================================================
-        wv_web.setWebViewClient(new BWebviewClient());
-        wv_web.setWebChromeClient(new BChromeClient());
-        wv_web.addJavascriptInterface(new WebAppBridge(this), "Android");
-
         //CSS 깨짐 방지-----------------------------
         Intent intent = getActivity().getIntent(); /*데이터 수신*/
         //BoardActivity에서 전달한 번들 저장
@@ -97,8 +92,10 @@ public class BoardFragment extends Fragment implements WebAppBridgeInterface {
                 wv_web.reload();
             }
         });
+
+        //결제관련 url 컨트롤==========================================================
         //새로고침 완료되면 멈추기
-        wv_web.setWebViewClient(new WebViewClient()
+        wv_web.setWebViewClient(new BWebviewClient()    //<<<<< WebviewClient를 커스텀 WebviewClient로 설정
         {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -106,6 +103,8 @@ public class BoardFragment extends Fragment implements WebAppBridgeInterface {
             }
 
         });
+        wv_web.setWebChromeClient(new BChromeClient());
+        wv_web.addJavascriptInterface(new WebAppBridge(this), "Android");
 
         return view;
     }
