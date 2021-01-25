@@ -152,7 +152,9 @@ public class FriendFragment extends Fragment {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Intent intent = new Intent(view.getContext(), MessageActivity.class);
+                    intent.putExtra("destinationUid",friendModels.get(position).friendUid);
+                    startActivity(intent);
                 }
             });
         }

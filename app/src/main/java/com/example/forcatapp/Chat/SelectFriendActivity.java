@@ -103,12 +103,13 @@ Button button;
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if(dataSnapshot.exists()){
                            UserModel userModel = dataSnapshot.getValue(UserModel.class);
-                            Glide.with
-                                    (holder.itemView.getContext())
-                                    .load(userModel.profileImageUrl)
-                                    .apply(new RequestOptions().circleCrop())
-                                    .into(((CustomViewHolder)holder).imageView);
-                            ((CustomViewHolder)holder).textView.setText(userModel.userName);
+                               Glide.with
+                                       (holder.itemView.getContext())
+                                       .load(userModel.profileImageUrl)
+                                       .apply(new RequestOptions().circleCrop())
+                                       .into(((CustomViewHolder) holder).imageView);
+                               ((CustomViewHolder) holder).textView.setText(userModel.userName);
+
                             if(userModel.comment != null){
                                 ((CustomViewHolder) holder).textView_comment.setText(userModel.comment);
                             }

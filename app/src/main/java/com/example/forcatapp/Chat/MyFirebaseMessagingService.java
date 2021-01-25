@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -24,8 +25,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            String title = remoteMessage.getData().get("title").toString();
-            String text = remoteMessage.getData().get("text").toString();
+
+            String title = remoteMessage.getData().get("title").toString();     //"알림";
+
+            String text = remoteMessage.getData().get("text").toString();    //"세메세지";
+
             sendNotification(title,text);
 
         }
