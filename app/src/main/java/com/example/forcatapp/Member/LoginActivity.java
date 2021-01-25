@@ -64,8 +64,8 @@ public class LoginActivity extends AppCompatActivity {
                 android.webkit.CookieManager cookieManager = CookieManager.getInstance();
                 cookieManager.removeAllCookies(null);
                 cookieManager.flush();
-             //파이어베이스 로그아웃 처리
-                mAuth.signOut();
+//             //파이어베이스 로그아웃 처리
+              mAuth.signOut();
 
         //회원가입 클릭 시
         signup = (Button)findViewById(R.id.loginActivity_buttn_signup);
