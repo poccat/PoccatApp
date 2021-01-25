@@ -93,7 +93,7 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
             // 응답 본문 가져오기
             String body = post.getBody();
             Log.d(TAG, "doInBackground: body===>" + body);
-            if(body!=null){
+            if(body!=null && body.equals("1")==false ){
                 jsonToArray(body);
             }
 
