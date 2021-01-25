@@ -55,7 +55,7 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
     }
 
     @Override
-        protected Integer doInBackground(Map<String, Object>... maps) { // 내가 전송하고 싶은 파라미터
+        protected Integer doInBackground(Map<String, Object>... maps) {
         // Http 요청 준비 작업
         switch(requestCode) {
             case "postingUpload":
@@ -73,11 +73,7 @@ public class OracleDBUpload extends AsyncTask<Map<String, Object>, Integer, Inte
             case "getMapInfo":
                 this.servletUrl = "/cat/cat_map.foc";
                 break;
-            default:
-                //...
-                break;
         }
-
             http = new HttpClient.Builder
                 ("POST", "http://" + ip + portNum + servletUrl); //포트번호,서블릿주소
             // Parameter 를 전송한다.

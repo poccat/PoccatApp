@@ -32,7 +32,7 @@ public class QRFragment extends Fragment {
     String qrContent = null;//네이티브앱
     WebView wv_content = null;//네이티브앱-그안에 보여지는 콘텐츠는 웹앱이다.
 
-    private static final String TAG = "MypageFragment";
+    private static final String TAG = "QRFragment";
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qr, container, false);
 
@@ -48,7 +48,6 @@ public class QRFragment extends Fragment {
                         .initiateScan();
             }
         });
-
         return view;
     }//onCreateView
 
