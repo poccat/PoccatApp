@@ -99,6 +99,7 @@ public class MessageActivity extends AppCompatActivity {
                 else{
                     ChatModel.Comment comment = new ChatModel.Comment();
                     comment.uid= uid;
+                    comment.name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                     comment.message = editText.getText().toString();
                     comment.timestamp = ServerValue.TIMESTAMP;
 

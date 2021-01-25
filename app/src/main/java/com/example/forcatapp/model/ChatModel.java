@@ -9,6 +9,8 @@ public class ChatModel {
 
     public static class Comment{
         public String uid;
+        public String profileImageUrl;
+        public String name;
         public String message;
         public Object timestamp;
         public Map<String, Object> readUsers = new HashMap<>();
