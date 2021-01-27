@@ -24,9 +24,13 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.forcatapp.R;
+import com.example.forcatapp.util.OracleDBUpload;
 import com.example.forcatapp.util.SessionControl;
 
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import kr.co.bootpay.BootpayWebView;
 import kr.co.bootpay.listener.EventListener;
@@ -34,9 +38,11 @@ import kr.co.bootpay.listener.EventListener;
 public class BoardFragment extends Fragment implements WebAppBridgeInterface {
     private static final String TAG = "BoardFragment";
     BootpayWebView wv_web;
+    Context mContext;
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_boardlist, container, false);
+        mContext = getContext();
 
         //이전버튼 이벤트 처리
         ImageView backArrow = view.findViewById(R.id.common_back);
@@ -105,6 +111,17 @@ public class BoardFragment extends Fragment implements WebAppBridgeInterface {
         });
         wv_web.setWebChromeClient(new BChromeClient());
         wv_web.addJavascriptInterface(new WebAppBridge(this), "Android");
+
+        OracleDBUpload oracleDBUpload = new OracleDBUpload("loginGetSession", mContext);
+        oracleDBUpload.execute();
+        try {
+            oracleDBUpload.get();
+            List<Map<String, Object>> resultList = oracleDBUpload.resultList;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         return view;
     }

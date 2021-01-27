@@ -1,22 +1,13 @@
 package com.example.forcatapp.Main;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.example.forcatapp.R;
@@ -55,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         SectionPagerAdapter adapter = new SectionPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MypageFragment());
         adapter.addFragment(new QRFragment());
-        adapter.addFragment(new FollowFragment());
+        adapter.addFragment(new NonFollowFragment());
         adapter.addFragment(new MainFragment());
         adapter.addFragment(new WriteFragment());
         ViewPager viewPager = findViewById(R.id.container);
