@@ -4,27 +4,16 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 
 
-import com.example.forcatapp.Main.FollowFragment;
-import com.example.forcatapp.Main.MainFragment;
-import com.example.forcatapp.Main.WriteFragment;
 import com.example.forcatapp.R;
 import com.example.forcatapp.util.BottomNavBarHelper;
 import com.example.forcatapp.util.SectionPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
-import com.google.android.material.tabs.TabLayoutMediator;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 public class ChatActivity extends AppCompatActivity {
