@@ -10,10 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.forcatapp.Main.MainActivity;
 import com.example.forcatapp.model.UserModel;
 import com.example.forcatapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -79,6 +81,8 @@ public class SignupActivity extends AppCompatActivity {
                                         Task<Uri> imageUrl = task.getResult().getStorage().getDownloadUrl();
                                         if(imageUrl!=null) {
                                             while (!imageUrl.isComplete()) ;
+                                            UserProfileChangeRequest userProfileChangeRequest2 = new UserProfileChangeRequest.Builder().setPhotoUri(imageUrl.getResult()).build();
+                                            FirebaseAuth.getInstance().getCurrentUser().updateProfile(userProfileChangeRequest2);
                                             UserModel userModel = new UserModel();
                                             userModel.userName = name.getText().toString();
                                             userModel.profileImageUrl = imageUrl.getResult().toString();
@@ -86,7 +90,13 @@ public class SignupActivity extends AppCompatActivity {
                                             FirebaseDatabase.getInstance().getReference().child("users").child(uid).setValue(userModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
-                                                    SignupActivity.this.finish();
+                                                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email.getText().toString(),pw.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                                                        @Override
+                                                        public void onSuccess(AuthResult authResult) {
+                                                            Intent intent = new Intent();
+                                                            startActivity(new Intent(SignupActivity.this, MainActivity.class));
+                                                       }
+                                                    });
                                                 }
                                             });
 

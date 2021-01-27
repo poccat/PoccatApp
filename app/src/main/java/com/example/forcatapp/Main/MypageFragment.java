@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.forcatapp.Member.LoginActivity;
 import com.example.forcatapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,7 +25,8 @@ public class MypageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
 
         ImageView imageView = view.findViewById(R.id.iv_profile_photo);
-        imageView.setImageResource(R.drawable.default_user_image);
+        imageView.setImageURI(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
+        Glide.with(view).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString()).into(imageView);
         Button btn_logout = view.findViewById(R.id.btn_logout);
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override

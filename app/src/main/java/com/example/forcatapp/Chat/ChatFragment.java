@@ -147,13 +147,7 @@ public class ChatFragment extends Fragment {
             if(commentMap.keySet().toArray().length > 0) {
                 String lastMessageKey = (String) commentMap.keySet().toArray()[0];
                 customViewHolder.textView_last_message.setText(chatModels.get(position).comments.get(lastMessageKey).message);
-
-
-
-                simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-                long unixTime = (long) chatModels.get(position).comments.get(lastMessageKey).timestamp;
-                Date date = new Date(unixTime);
-                customViewHolder.textView_timestamp.setText(simpleDateFormat.format(date));
+                customViewHolder.textView_timestamp.setText(chatModels.get(position).comments.get(lastMessageKey).timestamp.toString());
             }
             customViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -62,7 +62,7 @@ public class MessageActivity extends AppCompatActivity {
     private String chatRoomUid;
 
     private RecyclerView recyclerView;
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+
 
     private UserModel destinationUserModel;
     private DatabaseReference databaseReference;
@@ -99,9 +99,26 @@ public class MessageActivity extends AppCompatActivity {
                 else{
                     ChatModel.Comment comment = new ChatModel.Comment();
                     comment.uid= uid;
+                    comment.profileImageUrl=FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString();
                     comment.name = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
                     comment.message = editText.getText().toString();
-                    comment.timestamp = ServerValue.TIMESTAMP;
+                    Date date = new Date();
+                    String year = String.valueOf(date.getYear()+1900);
+
+                    int monthT = date.getMonth()+1;
+                    String month = (monthT<10) ? "0"+monthT : String.valueOf(monthT);
+
+                    int dayT = date.getDate();
+                    String day = (dayT<10) ? "0"+dayT : String.valueOf(dayT);
+
+                    int hourT = date.getHours();
+                    String hour = (hourT<10) ? "0"+hourT : String.valueOf(hourT);
+
+                    int tM = date.getMinutes();
+                    String minute = (tM<10) ? "0"+tM : String.valueOf(tM);
+
+                    String time = year+"."+month+"."+day+" "+hour+":"+minute;
+                    comment.timestamp = time;
 
                     FirebaseDatabase.getInstance().getReference().child("chatrooms").child(chatRoomUid).child("comments").push().setValue(comment).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -125,9 +142,9 @@ public class MessageActivity extends AppCompatActivity {
         NotificationModel notificationModel = new NotificationModel();
         notificationModel.to = destinationUserModel.pushToken;
         notificationModel.notification.title = userName;
+        notificationModel.notification.text = editText.getText().toString();
         notificationModel.data.text = editText.getText().toString();
         notificationModel.data.title = userName;
-        notificationModel.data.text=editText.getText().toString();
 
 
 
@@ -276,11 +293,8 @@ public class MessageActivity extends AppCompatActivity {
                 messageViewHolder.linearLayout_main.setGravity(Gravity.LEFT);
                 setReadCounter(position,messageViewHolder.textView_readCounter_right);
             }
-            long unixTime = (long)comments.get(position).timestamp;
-            Date date = new Date(unixTime);
-            simpleDateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Seoul"));
-            String time = simpleDateFormat.format(date);
-            messageViewHolder.textView_timestamp.setText(time);
+            messageViewHolder.textView_timestamp.setText(comments.get(position).timestamp.toString());
+
 
 
         }
